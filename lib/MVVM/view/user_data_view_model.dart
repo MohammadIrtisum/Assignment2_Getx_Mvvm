@@ -15,6 +15,7 @@ class UserController extends GetxController {
     initializeDatabase();
   }
 
+
   Future<void> initializeDatabase() async {
     String path = join(await getDatabasesPath(), 'users.db');
     database = await openDatabase(

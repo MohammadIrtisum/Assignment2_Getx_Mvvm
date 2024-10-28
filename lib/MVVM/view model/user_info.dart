@@ -12,50 +12,51 @@ class SqfliteExample extends StatelessWidget {
   Widget build(BuildContext context) {
     String nameInput = '';
 
-    return Scaffold(
+    return Obx(()=>Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(21.0),
         child: SafeArea(
-          child: Column(
-            children: [
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Enter your name',
-                  hintText: 'Type your name...',
-                  border: OutlineInputBorder(),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(
+                  decoration: const InputDecoration(
+                    labelText: 'Enter your name',
+                    hintText: 'Type your name...',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    nameInput = value;
+                  },
+                  onSubmitted: (value) {
+                    if (nameInput.isNotEmpty) {
+            
+                      userController.insertUser(User(name: nameInput, age: 25));
+                      nameInput = '';
+                    }
+                  },
                 ),
-                onChanged: (value) {
-                  nameInput = value;
-                },
-                onSubmitted: (value) {
-                  if (nameInput.isNotEmpty) {
-
-                    userController.insertUser(User(name: nameInput, age: 25));
-                    nameInput = '';
-                  }
-                },
-              ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: Obx(() {
-                  return userController.users.isNotEmpty
-                      ? ListView.builder(
-                    itemCount: userController.users.length,
-                    itemBuilder: (context, index) {
-                      final user = userController.users[index];
-                      return ListTile(
-                        title: Text(user.name),
-                        subtitle: Text('Age: ${user.age}'),
-                      );
-                    },
-                  )
-                      : const SizedBox();
-                }),
-              ),
-            ],
+                const SizedBox(height: 20),
+                Expanded(
+                    child:
+                     userController.users.isNotEmpty
+                        ? ListView.builder(
+                      itemCount: userController.users.length,
+                      itemBuilder: (context, index) {
+                        final user = userController.users[index];
+                        return ListTile(
+                          title: Text(user.name),
+                          subtitle: Text('Age: ${user.age}'),
+                        );
+                      },
+                    )
+                        : const SizedBox()
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    );
+    ));
   }
 }
